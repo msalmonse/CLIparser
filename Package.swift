@@ -16,13 +16,11 @@ let package = Package(
     targets: [
         .target(
             name: "CLIparser",
-            dependencies: [],
-            swiftSettings: [.unsafeFlags(["-Osize"])]
+            dependencies: []
         ),
         .testTarget(
             name: "CLIparserTests",
-            dependencies: ["CLIparser"],
-            swiftSettings: [.unsafeFlags(["-Osize"])]
+            dependencies: ["CLIparser"]
         )
     ]
 )
