@@ -74,9 +74,7 @@ extension ArgumentList {
             }
 
             return state.matched
-        } catch {
-            throw error
-        }
+        } catch { throw error }
     }
 
     enum MinusTest { case normal, longOnly, endOrNone }

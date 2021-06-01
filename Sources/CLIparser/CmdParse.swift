@@ -47,7 +47,7 @@ extension ArgumentList {
     ///   - args: the command line arguments
     /// - Returns: the matching command or nil
 
-    public func cmdGetter(_ cmds: CmdsToGet) -> CmdToGet? {
+    public func commandParser(_ cmds: CmdsToGet) -> CmdToGet? {
         let droppedArgs = Array(args.dropFirst(index))
         for cmd in cmds where cmd.cmdAndSub.count <= droppedArgs.count {
             if cmd.count == 0 || Array(droppedArgs.prefix(cmd.count)) == cmd.cmdAndSub {

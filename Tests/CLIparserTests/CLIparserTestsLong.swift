@@ -128,6 +128,7 @@ extension CLIparserTests {
                 .optionsParse(opts)
             XCTAssertEqual(result.count, 3)
             XCTAssertEqual(result[0].optValuesAt.count, 0)
+            XCTAssertEqual(result.last?.stringValue, "5", "Check for copying of remaining arguments")
         } catch {
             print(error.localizedDescription, to: &standardError)
             XCTFail(error.localizedDescription)

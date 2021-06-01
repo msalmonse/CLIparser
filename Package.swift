@@ -9,18 +9,20 @@ let package = Package(
         .library(
             name: "CLIparser",
             targets: ["CLIparser"]
-        ),
+        )
     ],
     dependencies: [
     ],
     targets: [
         .target(
             name: "CLIparser",
-            dependencies: []
+            dependencies: [],
+            swiftSettings: [.unsafeFlags(["-Osize"])]
         ),
         .testTarget(
             name: "CLIparserTests",
-            dependencies: ["CLIparser"]
-        ),
+            dependencies: ["CLIparser"],
+            swiftSettings: [.unsafeFlags(["-Osize"])]
+        )
     ]
 )
