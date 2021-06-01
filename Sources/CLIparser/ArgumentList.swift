@@ -16,8 +16,9 @@ public class ArgumentList {
     /// - Parameters:
     ///   - args: argument list
     ///   - startIndex: argument to start at
+    ///   - longOnly: only search for long options
 
-    init(_ args: [String], startIndex: Int, longOnly: Bool = false) {
+    init(_ args: [String], startIndex: Int = 1, longOnly: Bool = false) {
         self.args = args
         index = startIndex
         self.longOnly = longOnly

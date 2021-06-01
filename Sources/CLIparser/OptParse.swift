@@ -21,11 +21,11 @@ extension ArgumentList {
     ///   - CLIparserError.unknownName
     /// - Returns: a list of options found
 
-    public func parseArgs(_ toGet: OptsToGet, _ positionalTag: CLIparserTag? = nil) throws -> OptsGot {
-        let state = try ParseState(toGet)
-        let minusTest: MinusTest = longOnly ? .longOnly : .normal
-        argsLoop: while args.indices.contains(index) {
-            do {
+    public func optionsParse(_ toGet: OptsToGet, _ positionalTag: CLIparserTag? = nil) throws -> OptsGot {
+        do {
+            let state = try ParseState(toGet)
+            let minusTest: MinusTest = longOnly ? .longOnly : .normal
+            argsLoop: while args.indices.contains(index) {
                 switch MinusCount(args[index], type: minusTest) {
                 case .end:
                     index += 1
@@ -39,34 +39,44 @@ extension ArgumentList {
                 case .none:
                     break argsLoop
                 }
-            } catch {
-                throw error
             }
-        }
 
-        for optGot in state.matched {
-            let minCount = Int(optGot.opt.minCount)
-            let maxCount = Int(optGot.opt.maxCount)
-            switch optGot.optValuesAt.count {
-            case 0..<minCount:
-                throw CLIparserError.insufficientArguments(name: optGot.name)
-            case minCount...maxCount:
-                break
-            default:
-                throw CLIparserError.tooManyArguments(name: optGot.name)
+            for optGot in state.matched {
+                let minCount = Int(optGot.opt.minCount)
+                let maxCount = Int(optGot.opt.maxCount)
+                switch optGot.optValuesAt.count {
+                case 0..<minCount:
+                    throw CLIparserError.insufficientArguments(name: optGot.name)
+                case minCount...maxCount:
+                    break
+                default:
+                    throw CLIparserError.tooManyArguments(name: optGot.name)
+                }
             }
-        }
 
-        // check for missing required options
-        if !state.required.isEmpty {
-            var missing: [String] = []
-            for opt in state.required {
-                missing.append(opt.long ?? opt.short ?? "???")
+            // check for missing required options
+            if !state.required.isEmpty {
+                var missing: [String] = []
+                for opt in state.required {
+                    missing.append(opt.long ?? opt.short ?? "???")
+                }
+                throw CLIparserError.missingOptions(names: missing.joined(separator: ", "))
             }
-            throw CLIparserError.missingOptions(names: missing.joined(separator: ", "))
-        }
 
-        return state.matched
+            // Copy remaining arguments
+            if index < args.count {
+                let opt = OptToGet(1...255, tag: positionalTag)
+                let match = OptGot(opt: opt)
+                let optMatch = OptMatch(opt)
+                optMatch.matched = match
+                state.matched.append(match)
+                try argsCopy(optMatch)
+            }
+
+            return state.matched
+        } catch {
+            throw error
+        }
     }
 
     enum MinusTest { case normal, longOnly, endOrNone }
@@ -79,14 +89,19 @@ extension ArgumentList {
         ///   - test: type of test
 
         init(_ arg: String, type test: MinusTest) {
+            // -- signals the end of arguments
             if arg == "--" {
                 self = .end
+            // use endOrNone when arguments can start with -
             } else if test == .endOrNone {
                 self = .none
+            // a prefix of -- is always long
             } else if arg.hasPrefix("--") {
                 self = .long2
+            // a single - can be long or short depending on longOnly
             } else if arg.hasPrefix("-") {
                 self = (test == .longOnly) ? .long1 : .short
+            // no minuses
             } else {
                 self = .none
             }
