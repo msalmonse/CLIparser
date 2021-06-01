@@ -1,3 +1,3 @@
 # CLIparser
 
-A description of this package.
+This package implents a parser for the CLI arguments
