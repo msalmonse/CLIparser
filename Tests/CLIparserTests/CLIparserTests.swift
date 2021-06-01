@@ -4,12 +4,13 @@ import XCTest
 final class CLIparserTests: XCTestCase {
 
     enum CmdTag: CLIparserTag, Equatable {
-        case aCmd, abCmd, abcCmd, bCmd, cCmd, none
+        case aCmd, abCmd, abcCmd, acCmd, bCmd, cCmd, dNone, none
     }
 
-    func testCmdParse() {
+    func testCommandParse() {
         let cmds: [CmdToGet] = [
             CmdToGet(["a", "b", "c"], tag: CmdTag.abcCmd),
+            CmdToGet(["a", "", "c"], tag: CmdTag.acCmd),
             CmdToGet(["a", "b"], tag: CmdTag.abCmd),
             CmdToGet(["a"], tag: CmdTag.aCmd),
             CmdToGet(["b"], tag: CmdTag.bCmd),
@@ -30,6 +31,10 @@ final class CLIparserTests: XCTestCase {
         result = ArgumentList(["command", "a", "b", "c", "-a"]).commandParser(cmds)
         XCTAssertNotNil(result)
         XCTAssertEqual(result!.tag as? CmdTag, CmdTag.abcCmd)
+
+        result = ArgumentList(["command", "a", "d", "c", "-a"]).commandParser(cmds)
+        XCTAssertNotNil(result)
+        XCTAssertEqual(result!.tag as? CmdTag, CmdTag.acCmd)
 
         result = ArgumentList(["command", "d", "-a"]).commandParser(cmds)
         XCTAssertNotNil(result)

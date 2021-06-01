@@ -41,6 +41,21 @@ public typealias CmdsToGet = [CmdToGet]
 
 extension ArgumentList {
 
+    /// Compare cmd.cmdAndSub with args
+    /// - Parameter cmd: CmdToGet to compare
+    /// - Returns: true if they match, empty strings are wildcards
+
+    func cmdCompare(_ cmd: CmdToGet) -> Bool {
+        if cmd.count + index > args.count { return false }
+        let cmdList = cmd.cmdAndSub
+        var offset = index
+        for word in cmdList {
+            if word != args[offset] && !word.isEmpty { return false }
+            offset += 1
+        }
+        return true
+    }
+
     /// Compare arguments with commnds
     /// - Parameters:
     ///   - cmds: a list of possible commands
@@ -48,9 +63,8 @@ extension ArgumentList {
     /// - Returns: the matching command or nil
 
     public func commandParser(_ cmds: CmdsToGet) -> CmdToGet? {
-        let droppedArgs = Array(args.dropFirst(index))
-        for cmd in cmds where cmd.cmdAndSub.count <= droppedArgs.count {
-            if cmd.count == 0 || Array(droppedArgs.prefix(cmd.count)) == cmd.cmdAndSub {
+        for cmd in cmds {
+            if cmd.count == 0 || cmdCompare(cmd) {
                 index += cmd.count
                 return cmd
             }
