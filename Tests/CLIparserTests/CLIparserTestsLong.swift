@@ -99,32 +99,32 @@ extension CLIparserTests {
         ]
 
         do {
-            var result = try ArgumentList(["command", "-adam", "-bertil", "-cecil", "-david"], longOnly: true)
+            var result = try ArgumentList(["command", "-adam", "-bertil", "-cecil", "-david"], options: [.longOnly])
                 .optionsParse(opts)
             XCTAssertEqual(result.count, 4)
 
-            result = try ArgumentList(["command", "-cecil", "-cecil"], longOnly: true).optionsParse(opts)
+            result = try ArgumentList(["command", "-cecil", "-cecil"], options: [.longOnly]).optionsParse(opts)
             XCTAssertEqual(result.count, 1)
             XCTAssertEqual(result[0].count, 2)
 
             XCTAssertThrowsError(
-                try ArgumentList(["command", "-adam", "-adam"], longOnly: true).optionsParse(opts)
+                try ArgumentList(["command", "-adam", "-adam"], options: [.longOnly]).optionsParse(opts)
             ) {
                 print($0.localizedDescription, to: &standardError)
             }
 
-            result = try ArgumentList(["command", "-elle=1", "-cecil"], longOnly: true).optionsParse(opts)
+            result = try ArgumentList(["command", "-elle=1", "-cecil"], options: [.longOnly]).optionsParse(opts)
             XCTAssertEqual(result.count, 2)
             XCTAssertEqual(result[0].optValuesAt.count, 1)
             XCTAssertEqual(result[0].optValuesAt[0].value, "1")
 
-            result = try ArgumentList(["command", "-gina=1", "-cecil", "--", "5"], longOnly: true)
+            result = try ArgumentList(["command", "-gina=1", "-cecil", "--", "5"], options: [.longOnly])
                 .optionsParse(opts)
             XCTAssertEqual(result.count, 1)
             XCTAssertEqual(result[0].optValuesAt.count, 4)
             XCTAssertEqual(result[0].optValuesAt[2].value, "--")
 
-            result = try ArgumentList(["command", "-fiona=1", "-cecil", "--", "5"], longOnly: true)
+            result = try ArgumentList(["command", "-fiona=1", "-cecil", "--", "5"], options: [.longOnly])
                 .optionsParse(opts)
             XCTAssertEqual(result.count, 3)
             XCTAssertEqual(result[0].optValuesAt.count, 0)
@@ -148,18 +148,18 @@ extension CLIparserTests {
         ]
 
         do {
-            var result = try ArgumentList(["command", "-bertil", "-no-bertil", "--", "5"], longOnly: true)
+            var result = try ArgumentList(["command", "-bertil", "-no-bertil", "--", "5"], options: [.longOnly])
                 .optionsParse(opts)
             XCTAssertEqual(result.count, 2)
             XCTAssertEqual(result[0].count, 0)
 
-            result = try ArgumentList(["command", "-nobertil", "-bertil", "--", "5"], longOnly: true)
+            result = try ArgumentList(["command", "-nobertil", "-bertil", "--", "5"], options: [.longOnly])
                 .optionsParse(opts)
             XCTAssertEqual(result.count, 2)
             XCTAssertEqual(result[0].count, 1)
 
             // explicit nodavid wins over pseudo nodavid
-            result = try ArgumentList(["command", "-nodavid", "-david", "--", "5"], longOnly: true)
+            result = try ArgumentList(["command", "-nodavid", "-david", "--", "5"], options: [.longOnly])
                 .optionsParse(opts)
             XCTAssertEqual(result.count, 3)
 

@@ -57,7 +57,7 @@ extension CLIparserTests {
             """
         let expected2 = expected.replacingOccurrences(of: "!", with: "  ")
 
-        let usage = Usage().optUsage(opts, longFirst: true)
+        let usage = Usage().optUsage(opts, options: [.longFirst])
         XCTAssertEqual(usage, expected2)
     }
 
@@ -67,7 +67,7 @@ extension CLIparserTests {
         ]
         let expected = "  -adam                  long only option"
 
-        let usage = Usage().optUsage(opts, longOnly: true)
+        let usage = Usage().optUsage(opts, options: [.longOnly])
         XCTAssertEqual(usage, expected)
     }
 

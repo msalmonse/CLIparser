@@ -31,6 +31,7 @@ public typealias OptsGot = [OptGot]
 class OptMatch {
     let opt: OptToGet
     var matched: OptGot?
+    var long: String? { opt.long }
 
     init(_ opt: OptToGet) { self.opt = opt}
 }

@@ -34,9 +34,6 @@ extension OptToGet {
         public static let includeMinusMinus = Options(rawValue: 1 << 3)
         var minusMinusIncluded: Bool { contains(Self.includeMinusMinus) }
 
-        @available(*, unavailable, renamed: "includeMinus")
-        public static let minusOK = Options(rawValue: 1 << 2)
-
         /// option can appear multiple times
         public static let multi = Options(rawValue: 1 << 4)
         var isMulti: Bool { contains(Self.multi) }
@@ -45,13 +42,18 @@ extension OptToGet {
         public static let required = Options(rawValue: 1 << 5)
         var isRequired: Bool { contains(Self.required) }
 
+        // option cannot be abbreviated
+        public static let unabbrev = Options(rawValue: 1 << 6)
+        var canAbbrev: Bool { !contains(Self.unabbrev) }
+
         private static let allNames: [(Options, String)] = [
             (.flag, ".flag"),
             (.hidden, ".hidden"),
             (.includeMinus, ".includeMinus"),
             (.includeMinusMinus, ".includeMinusMinus"),
             (.multi, ".multi"),
-            (.required, ".required")
+            (.required, ".required"),
+            (.unabbrev, ".unabbrev")
         ]
 
         public var description: String {
@@ -59,7 +61,7 @@ extension OptToGet {
             for (value, name) in Self.allNames {
                 if contains(value) { result.append(name) }
             }
-            return "[" + result.joined(separator: ", ") + "]"
+            return "[" + result.sorted().joined(separator: ", ") + "]"
         }
     }
 }

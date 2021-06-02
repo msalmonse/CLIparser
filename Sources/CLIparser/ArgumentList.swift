@@ -10,17 +10,17 @@ import Foundation
 public class ArgumentList {
     internal var args: [String]
     internal var index: Int
-    internal let longOnly: Bool
+    internal let options: CLIparserOptions
 
     /// Holder for CLI arguments
     /// - Parameters:
     ///   - args: argument list
     ///   - startIndex: argument to start at
-    ///   - longOnly: only search for long options
+    ///   - options: parser options
 
-    public init(_ args: [String], startIndex: Int = 1, longOnly: Bool = false) {
+    public init(_ args: [String], startIndex: Int = 1, options: CLIparserOptions = []) {
         self.args = args
         index = startIndex
-        self.longOnly = longOnly
+        self.options = options
     }
 }

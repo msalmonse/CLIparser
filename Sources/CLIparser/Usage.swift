@@ -147,10 +147,11 @@ public struct Usage {
 
     public func optUsage(
         _ opts: OptsToGet,
-        longFirst: Bool = false,
-        longOnly: Bool = false
+        options: CLIparserOptions = []
     ) -> String {
         var result: [String] = []
+        let longFirst = options.putLongFirst
+        let longOnly = options.onlyLong
 
         for opt in opts.sorted() where !opt.options.isHidden {
             if longOnly, let name = opt.long {

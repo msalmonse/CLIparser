@@ -65,4 +65,52 @@ final class CLIparserTests: XCTestCase {
             XCTFail(error.localizedDescription)
         }
     }
+
+    func testAbbrev() {
+        let opts: OptsToGet = [
+            OptToGet(long: "longoption", options: [.unabbrev]),
+            OptToGet(long: "longeroption", 1...1),
+            OptToGet(long: "longestoption", options: [.flag])
+        ]
+        let longer = [OptToGet(long: "longer")]
+        let longer2 = longer + longer
+
+        do {
+            var result = try ArgumentList(["cmd", "--longer=1"]).optionsParse(opts)
+            XCTAssertEqual(result.count, 1)
+            XCTAssertEqual(result[0].opt.long, "longeroption")
+
+            result = try ArgumentList(["cmd", "--longesto"]).optionsParse(opts)
+            XCTAssertEqual(result.count, 1)
+
+            result = try ArgumentList(["cmd", "--nolongesto"]).optionsParse(opts)
+            XCTAssertEqual(result.count, 1)
+            XCTAssertEqual(result[0].opt.long, "longestoption")
+
+            XCTAssertThrowsError(try ArgumentList(["cmd", "--longesto"], options: [.noAbbreviations])
+                                    .optionsParse(opts)
+            ) {
+                print($0.localizedDescription, to: &standardError)
+            }
+
+            XCTAssertThrowsError(try ArgumentList(["cmd", "--long", "?"]).optionsParse(opts)) {
+                print($0.localizedDescription, to: &standardError)
+            }
+
+            XCTAssertThrowsError(try ArgumentList(["cmd", "--longo", "?"]).optionsParse(opts)) {
+                print($0.localizedDescription, to: &standardError)
+            }
+
+            result = try ArgumentList(["cmd", "--longer"]).optionsParse(opts + longer)
+            XCTAssertEqual(result.count, 1)
+            XCTAssertEqual(result[0].opt.long, "longer")
+
+            XCTAssertThrowsError(try ArgumentList(["cmd", "--long", "?"]).optionsParse(opts + longer2)) {
+                print($0.localizedDescription, to: &standardError)
+            }
+        } catch {
+            print(error.localizedDescription, to: &standardError)
+            XCTFail(error.localizedDescription)
+        }
+    }
 }

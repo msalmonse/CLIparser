@@ -23,8 +23,8 @@ extension ArgumentList {
 
     public func optionsParse(_ toGet: OptsToGet, _ positionalTag: CLIparserTag? = nil) throws -> OptsGot {
         do {
-            let state = try ParseState(toGet)
-            let minusTest: MinusTest = longOnly ? .longOnly : .normal
+            let state = try ParseState(toGet, options.canAbbreviate)
+            let minusTest: MinusTest = options.onlyLong ? .longOnly : .normal
             argsLoop: while args.indices.contains(index) {
                 switch MinusCount(args[index], type: minusTest) {
                 case .end:
