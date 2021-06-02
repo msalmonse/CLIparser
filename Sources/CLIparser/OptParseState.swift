@@ -52,3 +52,22 @@ internal class ParseState {
         self.required = required
     }
 }
+
+#if DEBUG
+extension ArgumentList {
+    /// List the abbreviations
+    /// - Parameter opts: options
+    /// - Returns: all the abbreviations
+    static public func abbreviations(_ opts: OptsToGet) -> String {
+        var result: [String] = []
+        if let state = try? ParseState(opts, true) {
+            for key in state.longToGet.keys.sorted() {
+                if let long = state.longToGet[key]?.long, long != key {
+                    result.append("\(key): \(long)")
+                }
+            }
+        }
+        return result.joined(separator: "\n")
+    }
+}
+#endif

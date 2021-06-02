@@ -14,11 +14,11 @@ public class ArgumentList {
 
     /// Holder for CLI arguments
     /// - Parameters:
-    ///   - args: argument list
-    ///   - startIndex: argument to start at
-    ///   - options: parser options
+    ///   - args: argument list, default: argv
+    ///   - startIndex: argument to start at, default: 1
+    ///   - options: parser options, default: none
 
-    public init(_ args: [String], startIndex: Int = 1, options: CLIparserOptions = []) {
+    public init(_ args: [String] = CommandLine.arguments, startIndex: Int = 1, options: CLIparserOptions = []) {
         self.args = args
         index = startIndex
         self.options = options

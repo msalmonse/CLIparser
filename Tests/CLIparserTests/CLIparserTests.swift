@@ -7,6 +7,11 @@ final class CLIparserTests: XCTestCase {
         case aCmd, abCmd, abcCmd, acCmd, bCmd, cCmd, dNone, none
     }
 
+    func testCrc8() {
+        let data: Data = Data([0xaa, 0x14, ~0x14, 0, 0, 0, 0, 0])
+        XCTAssertEqual(crc8(data), 92)
+    }
+
     func testCommandParse() {
         let cmds: [CmdToGet] = [
             CmdToGet(["a", "b", "c"], tag: CmdTag.abcCmd),
@@ -79,6 +84,11 @@ final class CLIparserTests: XCTestCase {
             var result = try ArgumentList(["cmd", "--longer=1"]).optionsParse(opts)
             XCTAssertEqual(result.count, 1)
             XCTAssertEqual(result[0].opt.long, "longeroption")
+
+            let abbr = ArgumentList.abbreviations(opts)
+            // print(abbr)
+            // print(crc8(abbr))
+            XCTAssertEqual(crc8(abbr), 21)
 
             result = try ArgumentList(["cmd", "--longesto"]).optionsParse(opts)
             XCTAssertEqual(result.count, 1)

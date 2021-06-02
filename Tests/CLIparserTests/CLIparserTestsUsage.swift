@@ -11,8 +11,13 @@ import XCTest
 extension CLIparserTests {
     // count the number of \n by removing them
     // this may be one less than expected as usage strings have no \n at the end
-    func nlCount(_ string: String) -> Int {
-        return string.count - string.replacingOccurrences(of: "\n", with: "").count
+    func nlCount(_ text: String) -> Int {
+        return text.count - text.replacingOccurrences(of: "\n", with: "").count
+    }
+
+    func maxLineLength(_ text: String) -> Int {
+        let lines = text.components(separatedBy: "\n")
+        return lines.map { $0.count }.max() ?? -1
     }
 
     func testUsage1() {
@@ -120,16 +125,16 @@ extension CLIparserTests {
         // this should break at the second \u{11} character
         usage = Usage(tagLeft: 5, textLeft: 15, textRight: 35, gap: 5).optUsage(opts2)
         // print(usage)
-        // print(usage.count)
-        XCTAssertEqual(usage.count, 167)
+        // print(crc8(usage))
+        XCTAssertEqual(crc8(usage), 243)
         XCTAssertEqual(nlCount(usage), 3)
 
         // check for breaking into 2 lines
         // \u{11} ignored as the string fits between left and right
         usage = Usage(tagLeft: 5, textLeft: 15, textRight: 80, gap: 5).optUsage(opts2)
         // print(usage)
-        // print(usage.count)
-        XCTAssertEqual(usage.count, 137)
+        // print(crc8(usage))
+        XCTAssertEqual(crc8(usage), 202)
         XCTAssertEqual(nlCount(usage), 1)
     }
 
@@ -144,8 +149,8 @@ extension CLIparserTests {
 
         let usage = Usage(tagLeft: 5, textLeft: 15, textRight: 35).cmdUsage(cmds)
         // print(usage)
-        // print(usage.count)
-        XCTAssertEqual(usage.count, 194)
+        // print(crc8(usage))
+        XCTAssertEqual(crc8(usage), 111)
     }
 
     // swiftlint:disable function_body_length
@@ -207,14 +212,14 @@ extension CLIparserTests {
         ]
         var wrapped = Usage(textLeft: 5, textRight: 55).paragraphWrap(paras)
         // print(wrapped)
-        // print(wrapped.count)
-        XCTAssertEqual(wrapped.count, 4156)
+        // print(crc8(wrapped))
+        XCTAssertEqual(crc8(wrapped), 128)
         XCTAssertEqual(nlCount(wrapped), 83)
 
         wrapped = Usage(textLeft: 0, textRight: 50).paragraphWrap(paras)
-        print(wrapped)
-        print(wrapped.count)
-        XCTAssertEqual(wrapped.count, 3746)
+        // print(wrapped)
+        // print(crc8(wrapped))
+        XCTAssertEqual(crc8(wrapped), 19)
         XCTAssertEqual(nlCount(wrapped), 83)
     }
 }
