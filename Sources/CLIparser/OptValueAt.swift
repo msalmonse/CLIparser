@@ -16,6 +16,10 @@ public struct OptValueAt {
     public var isEmpty: Bool { value.isEmpty }
 
     public static let empty = OptValueAt(value: "", atIndex: -1)
+
+    public func error(_ valueType: String) -> CLIparserError {
+        return CLIparserError.illegalValue(type: valueType, valueAt: self)
+    }
 }
 
 public typealias OptValuesAt = [OptValueAt]
