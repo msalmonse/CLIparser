@@ -15,13 +15,11 @@ public class CmdToGet: Encodable {
     }
 
     let cmdAndSub: [String]
-    let count: Int
     public let tag: CLIparserTag?
     let usage: String?
 
     public init(_ cmdAndSub: [String], tag: CLIparserTag? = nil, usage: String? = nil) {
         self.cmdAndSub = cmdAndSub
-        count = cmdAndSub.count
         self.tag = tag
         self.usage = usage
     }
@@ -46,7 +44,7 @@ extension ArgumentList {
     /// - Returns: true if they match, empty strings are wildcards
 
     func cmdCompare(_ cmd: CmdToGet) -> Bool {
-        if cmd.count + index > args.count { return false }
+        if cmd.cmdAndSub.count + index > args.count { return false }
         let cmdList = cmd.cmdAndSub
         var offset = index
         for word in cmdList {
@@ -64,8 +62,8 @@ extension ArgumentList {
 
     public func commandParser(_ cmds: CmdsToGet) -> CmdToGet? {
         for cmd in cmds {
-            if cmd.count == 0 || cmdCompare(cmd) {
-                index += cmd.count
+            if cmd.cmdAndSub.isEmpty || cmdCompare(cmd) {
+                index += cmd.cmdAndSub.count
                 return cmd
             }
         }

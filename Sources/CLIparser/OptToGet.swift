@@ -24,7 +24,7 @@ public class OptToGet: Comparable, Hashable, Encodable {
     let argTag: String?
 
     // test if arguments expected
-    var hasArgs: Bool { minCount > 0 || maxCount > 0}
+    var hasArgs: Bool { minCount > 0 || maxCount > 0 }
 
     /// Initialize an OptToGet object
     /// - Parameters:
@@ -61,9 +61,7 @@ public class OptToGet: Comparable, Hashable, Encodable {
     func match(long name: String) -> Bool {
         if name == long { return true }
         if let aka = aka {
-            for long in aka {
-                if name == long { return true }
-            }
+            for long in aka where name == long { return true }
         }
 
         return false

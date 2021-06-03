@@ -32,7 +32,7 @@ class OptMatch {
     let opt: OptToGet
     var matched: OptGot?
 
-    init(_ opt: OptToGet) { self.opt = opt}
+    init(_ opt: OptToGet) { self.opt = opt }
 
     func match(long: String) -> Bool { opt.match(long: long) }
 }

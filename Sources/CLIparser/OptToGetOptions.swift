@@ -20,7 +20,7 @@ extension OptToGet {
 
         /// option is a flag and has no options
         public static let flag = Options(rawValue: 1 << 0)
-        var isFlag: Bool { contains(.flag)}
+        var isFlag: Bool { contains(.flag) }
 
         /// option should not be seen in usage
         public static let hidden = Options(rawValue: 1 << 1)

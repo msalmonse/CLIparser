@@ -24,23 +24,23 @@ public enum CLIparserError: Error, CustomStringConvertible {
 extension CLIparserError: LocalizedError {
     public var errorDescription: String? {
         switch self {
-        case .duplicateName(let name):
+        case let .duplicateName(name):
             return "Option \"\(name)\" defined previously"
-        case .duplicateOption(let name, let index):
+        case let .duplicateOption(name, index):
             return "Option \"\(name)\" is on the command line multiple times, last at argument \(index)"
-        case .illegalValue(let type, let valueAt):
+        case let .illegalValue(type, valueAt):
             return "Not a valid \(type) at argument \(valueAt.atIndex): \"\(valueAt.value)\""
-        case .insufficientArguments(let name):
+        case let .insufficientArguments(name):
             return "Not enough arguments to satisfy minimum requirements for \"\(name)\""
-        case .missingOptions(let names):
+        case let .missingOptions(names):
             return "Missing options: \(names)"
         case .missingName:
             return "Option declared without a long or short name"
-        case .tooManyArguments(let name):
+        case let .tooManyArguments(name):
             return "The number of arguments for \"\(name)\" exceeds the maximum defined"
-        case .unknownError(let index):
+        case let .unknownError(index):
             return "An unknown error occured at argument: \(index)"
-        case .unknownName(let name, let index):
+        case let .unknownName(name, index):
             return "There is no option defined for \"\(name)\" at argument \(index)"
         }
     }

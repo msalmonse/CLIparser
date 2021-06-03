@@ -46,7 +46,7 @@ internal class ParseState {
                         // Is this an abbreviation of an alias
                         if let match = longToGet[abbrev], match !== optMatch {
                             // check if the previous entry was an abbreviation
-                            if !(longToGet[abbrev]?.match(long: abbrev) ?? false)  {
+                            if !(longToGet[abbrev]?.match(long: abbrev) ?? false) {
                                 longToGet[abbrev] = nil
                             }
                         }

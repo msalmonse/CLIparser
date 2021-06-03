@@ -71,16 +71,12 @@ final class CLIparserTests: XCTestCase {
         }
     }
 
-    func testAbbrev() {
+    func testAbbrev1() {
         let opts: OptsToGet = [
             OptToGet(long: "longoption", options: [.unabbrev]),
             OptToGet(long: "longeroption", 1...1),
-            OptToGet(long: "longestoption", aka: ["longestflag"], options: [.flag]),
-            OptToGet(long: "barlength"),
-            OptToGet(long: "barwidth"),
-            OptToGet(long: "barheight")
+            OptToGet(long: "longestoption", aka: ["longestflag"], options: [.flag])
         ]
-        let bar = [OptToGet(long: "bar")]
         let longer = [OptToGet(long: "longer")]
         let longer2 = longer + longer
 
@@ -92,7 +88,7 @@ final class CLIparserTests: XCTestCase {
             let abbr = ArgumentList.abbreviations(opts)
             // print(abbr)
             // print(crc8(abbr))
-            XCTAssertEqual(crc8(abbr), 158)
+            XCTAssertEqual(crc8(abbr), 51)
 
             result = try ArgumentList(["cmd", "--longestf"]).optionsParse(opts)
             XCTAssertEqual(result.count, 1)
@@ -122,12 +118,27 @@ final class CLIparserTests: XCTestCase {
             XCTAssertThrowsError(try ArgumentList(["cmd", "--long", "?"]).optionsParse(opts + longer2)) {
                 print($0.localizedDescription, to: &standardError)
             }
+        } catch {
+            print(error.localizedDescription, to: &standardError)
+            XCTFail(error.localizedDescription)
+        }
+    }
+
+    func testAbbrev2() {
+        let opts: OptsToGet = [
+            OptToGet(long: "barlength"),
+            OptToGet(long: "barwidth"),
+            OptToGet(long: "barheight")
+        ]
+        let bar = [OptToGet(long: "bar")]
+
+        do {
 
             XCTAssertThrowsError(try ArgumentList(["cmd", "--bar"]).optionsParse(opts)) {
                 print($0.localizedDescription, to: &standardError)
             }
 
-            result = try ArgumentList(["cmd", "--bar"]).optionsParse(opts + bar)
+            var result = try ArgumentList(["cmd", "--bar"]).optionsParse(opts + bar)
             XCTAssertEqual(result.count, 1)
             XCTAssertEqual(result[0].opt.long, "bar")
 

@@ -211,7 +211,7 @@ public struct Usage {
             return OptToGet(usage: cmd.usage, argTag: cmd.cmdAndSub.joined(separator: " "))
         }
 
-        let opts = cmds.filter { $0.usage != nil && $0.cmdAndSub.count > 0 }.map { cmds2opts($0) }
+        let opts = cmds.filter { $0.usage != nil && !$0.cmdAndSub.isEmpty }.map { cmds2opts($0) }
         return positionalUsage(opts)
     }
 }
