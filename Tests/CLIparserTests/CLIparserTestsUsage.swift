@@ -76,7 +76,21 @@ extension CLIparserTests {
         XCTAssertEqual(usage, expected)
     }
 
-    func testUsage4() {
+    func testUsageAKA() {
+        let opts = [
+            OptToGet(long: "adam", aka: ["eve", "cain", "able"], usage: "long only option")
+        ]
+        let expected =
+            """
+              -adam                  long only option
+              aka: eve, cain, able
+            """
+
+        let usage = Usage().optUsage(opts, options: [.longOnly])
+        XCTAssertEqual(usage, expected)
+    }
+
+    func testUsagePositional() {
         let opts = [
             OptToGet(usage: "input file name", argTag: "<input>"),
             OptToGet(usage: "file name", argTag: "<output>")

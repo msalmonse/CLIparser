@@ -43,11 +43,14 @@ internal class ParseState {
                     let end = long.index(start, offsetBy: offset)
                     let abbrev = String(long[start...end])
                     if prevAbbrev.contains(abbrev) {
-                        // check if the previous entry was an abbreviation
-                        if !(longToGet[abbrev]?.match(long: abbrev) ?? false) {
-                            longToGet[abbrev] = nil
+                        // Is this an abbreviation of an alias
+                        if let match = longToGet[abbrev], match !== optMatch {
+                            // check if the previous entry was an abbreviation
+                            if !(longToGet[abbrev]?.match(long: abbrev) ?? false)  {
+                                longToGet[abbrev] = nil
+                            }
                         }
-                    } else {
+                    } else if longToGet[abbrev] == nil {
                         longToGet[abbrev] = optMatch
                         prevAbbrev.insert(abbrev)
                     }

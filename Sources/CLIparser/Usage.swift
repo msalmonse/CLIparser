@@ -131,8 +131,13 @@ public struct Usage {
                 wrapOnce(&one, &result)
             }
         }
-        // remove any newlines
+        // remove any soft breaks
         result.append(one.replacingOccurrences(of: String(brk), with: " "))
+
+        if let aka = opt.aka {
+            one = indent + "aka: " + aka.joined(separator: ", ")
+            result.append(one)
+        }
 
         return result.joined(separator: "\n")
     }
