@@ -75,7 +75,10 @@ final class CLIparserTests: XCTestCase {
         let opts: OptsToGet = [
             OptToGet(long: "longoption", options: [.unabbrev]),
             OptToGet(long: "longeroption", 1...1),
-            OptToGet(long: "longestoption", options: [.flag])
+            OptToGet(long: "longestoption", options: [.flag]),
+            OptToGet(long: "barlength"),
+            OptToGet(long: "barwidth"),
+            OptToGet(long: "barheight")
         ]
         let longer = [OptToGet(long: "longer")]
         let longer2 = longer + longer
@@ -86,9 +89,9 @@ final class CLIparserTests: XCTestCase {
             XCTAssertEqual(result[0].opt.long, "longeroption")
 
             let abbr = ArgumentList.abbreviations(opts)
-            // print(abbr)
-            // print(crc8(abbr))
-            XCTAssertEqual(crc8(abbr), 21)
+            print(abbr)
+            print(crc8(abbr))
+            XCTAssertEqual(crc8(abbr), 209)
 
             result = try ArgumentList(["cmd", "--longesto"]).optionsParse(opts)
             XCTAssertEqual(result.count, 1)
@@ -116,6 +119,10 @@ final class CLIparserTests: XCTestCase {
             XCTAssertEqual(result[0].opt.long, "longer")
 
             XCTAssertThrowsError(try ArgumentList(["cmd", "--long", "?"]).optionsParse(opts + longer2)) {
+                print($0.localizedDescription, to: &standardError)
+            }
+
+            XCTAssertThrowsError(try ArgumentList(["cmd", "--bar"]).optionsParse(opts)) {
                 print($0.localizedDescription, to: &standardError)
             }
         } catch {

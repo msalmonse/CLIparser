@@ -17,6 +17,8 @@ internal class ParseState {
         var longToGet: [String: OptMatch] = [:]
         var shortToGet: [String: OptMatch] = [:]
         var required: Set<OptToGet> = []
+        var prevAbbrev: Set<String> = []
+
         for opt in toGet {
             if opt.long == nil && opt.short == nil { throw CLIparserError.missingName }
             if opt.options.isRequired { required.insert(opt) }
@@ -26,10 +28,9 @@ internal class ParseState {
                 shortToGet[short] = optMatch
             }
             if let long = opt.long {
-                if let optMatchLong = longToGet[long] {
-                    if optMatchLong.long == long { throw CLIparserError.duplicateName(name: long) }
-                    // Must be an abbreviation then
-                    longToGet[long] = nil
+                if longToGet[long] != nil {
+                    // Was the previous entry an abbreviation
+                    if !prevAbbrev.contains(long) { throw CLIparserError.duplicateName(name: long) }
                 }
                 longToGet[long] = optMatch
                 if canAbbrev && long.count >= 4 && opt.options.canAbbrev {
@@ -37,11 +38,14 @@ internal class ParseState {
                     for offset in 2..<(long.count - 1) {
                         let end = long.index(start, offsetBy: offset)
                         let abbrev = String(long[start...end])
-                        if let optMatchAbbr = longToGet[abbrev] {
-                            // If the existing entry is an abbreviation remove it
-                            if optMatchAbbr.long != abbrev { longToGet[abbrev] = nil }
+                        if prevAbbrev.contains(abbrev) {
+                            // check if the previous entry was an abbreviation
+                            if longToGet[abbrev]?.long != abbrev {
+                                longToGet[abbrev] = nil
+                            }
                         } else {
                             longToGet[abbrev] = optMatch
+                            prevAbbrev.insert(abbrev)
                         }
                     }
                 }
