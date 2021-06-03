@@ -80,6 +80,7 @@ final class CLIparserTests: XCTestCase {
             OptToGet(long: "barwidth"),
             OptToGet(long: "barheight")
         ]
+        let bar = [OptToGet(long: "bar")]
         let longer = [OptToGet(long: "longer")]
         let longer2 = longer + longer
 
@@ -89,8 +90,8 @@ final class CLIparserTests: XCTestCase {
             XCTAssertEqual(result[0].opt.long, "longeroption")
 
             let abbr = ArgumentList.abbreviations(opts)
-            print(abbr)
-            print(crc8(abbr))
+            // print(abbr)
+            // print(crc8(abbr))
             XCTAssertEqual(crc8(abbr), 209)
 
             result = try ArgumentList(["cmd", "--longesto"]).optionsParse(opts)
@@ -125,6 +126,39 @@ final class CLIparserTests: XCTestCase {
             XCTAssertThrowsError(try ArgumentList(["cmd", "--bar"]).optionsParse(opts)) {
                 print($0.localizedDescription, to: &standardError)
             }
+
+            result = try ArgumentList(["cmd", "--bar"]).optionsParse(opts + bar)
+            XCTAssertEqual(result.count, 1)
+            XCTAssertEqual(result[0].opt.long, "bar")
+        } catch {
+            print(error.localizedDescription, to: &standardError)
+            XCTFail(error.localizedDescription)
+        }
+    }
+
+    // test adding long options via aka
+    func testAKA() {
+        let opts: OptsToGet = [
+            OptToGet(long: "colour", aka: ["color", "clr", "farbe"], 0...1)
+        ]
+
+        do {
+            var result = try ArgumentList(["cmd", "--colour=1"]).optionsParse(opts)
+            XCTAssertEqual(result.count, 1)
+            XCTAssertEqual(result[0].opt.long, "colour")
+
+            result = try ArgumentList(["cmd", "--color=1"]).optionsParse(opts)
+            XCTAssertEqual(result.count, 1)
+            XCTAssertEqual(result[0].opt.long, "colour")
+
+            result = try ArgumentList(["cmd", "--clr=1"]).optionsParse(opts)
+            XCTAssertEqual(result.count, 1)
+            XCTAssertEqual(result[0].opt.long, "colour")
+
+            // check tag abbreviations work with aka as well
+            result = try ArgumentList(["cmd", "--far=1"]).optionsParse(opts)
+            XCTAssertEqual(result.count, 1)
+            XCTAssertEqual(result[0].opt.long, "colour")
         } catch {
             print(error.localizedDescription, to: &standardError)
             XCTFail(error.localizedDescription)

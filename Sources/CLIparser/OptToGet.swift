@@ -15,6 +15,7 @@ public class OptToGet: Comparable, Hashable, Encodable {
 
     let short: String?
     let long: String?
+    let aka: [String]?
     let minCount: UInt8
     let maxCount: UInt8
     let options: OptToGet.Options
@@ -29,6 +30,7 @@ public class OptToGet: Comparable, Hashable, Encodable {
     /// - Parameters:
     ///   - short: single character name for the option
     ///   - long: long name for the option
+    ///   - aka: also known as, a list of aliases
     ///   - minMax: range of the number of arguments to collect
     ///   - options: option behaviours
     ///   - tag: opaque object
@@ -38,6 +40,7 @@ public class OptToGet: Comparable, Hashable, Encodable {
     public init(
         short: String? = nil,
         long: String? = nil,
+        aka: [String]? = nil,
         _ minMax: ClosedRange<UInt8> = 0...0,
         options: [OptToGet.Options] = [],
         tag: CLIparserTag? = nil,
@@ -46,12 +49,24 @@ public class OptToGet: Comparable, Hashable, Encodable {
     ) {
         self.short = short
         self.long = long
+        self.aka = aka
         self.minCount = minMax.lowerBound
         self.maxCount = minMax.upperBound
         self.options = OptToGet.Options(options)
         self.tag = tag
         self.usage = usage
         self.argTag = argTag
+    }
+
+    func match(long name: String) -> Bool {
+        if name == long { return true }
+        if let aka = aka {
+            for long in aka {
+                if name == long { return true }
+            }
+        }
+
+        return false
     }
 
     /// Encode an OptToGet instance
