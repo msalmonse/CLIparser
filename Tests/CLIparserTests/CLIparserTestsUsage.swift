@@ -83,7 +83,7 @@ extension CLIparserTests {
         let expected =
             """
               -adam                  long only option
-              aka: eve, cain, able
+               aka: eve, cain, able
             """
 
         let usage = Usage().optUsage(opts, options: [.longOnly])

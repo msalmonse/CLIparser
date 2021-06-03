@@ -98,7 +98,7 @@ public struct Usage {
         }
     }
 
-    private func oneUsage(_ name: String, opt: OptToGet) -> String {
+    private func oneUsage(_ name: String, opt: OptToGet, akaIndent: String) -> String {
         let brk = Self.softBreak
         var result: [String] = []
         var one: String
@@ -135,7 +135,7 @@ public struct Usage {
         result.append(one.replacingOccurrences(of: String(brk), with: " "))
 
         if let aka = opt.aka {
-            one = indent + "aka: " + aka.joined(separator: ", ")
+            one = indent + akaIndent + "aka: " + aka.joined(separator: ", ")
             result.append(one)
         }
 
@@ -160,16 +160,16 @@ public struct Usage {
 
         for opt in opts.sorted() where !opt.options.isHidden {
             if longOnly, let name = opt.long {
-                result.append(oneUsage("-\(name)", opt: opt))
+                result.append(oneUsage("-\(name)", opt: opt, akaIndent: " "))
             } else if let long = opt.long, let short = opt.short {
                 let names = longFirst ? "--\(long), -\(short)" : "-\(short), --\(long)"
-                result.append(oneUsage(names, opt: opt))
+                result.append(oneUsage(names, opt: opt, akaIndent: longFirst ? "  " : " "))
             } else if let name = opt.long {
-                result.append(oneUsage("--\(name)", opt: opt))
+                result.append(oneUsage("--\(name)", opt: opt, akaIndent: "  "))
             } else if let name = opt.short {
-                result.append(oneUsage("-\(name)", opt: opt))
+                result.append(oneUsage("-\(name)", opt: opt, akaIndent: " "))
             } else {
-                result.append(oneUsage("", opt: opt))
+                result.append(oneUsage("", opt: opt, akaIndent: ""))
             }
         }
 
@@ -185,7 +185,7 @@ public struct Usage {
         var result: [String] = []
 
         for opt in opts {
-            result.append(oneUsage("", opt: opt))
+            result.append(oneUsage("", opt: opt, akaIndent: ""))
         }
 
         return result.joined(separator: "\n")
