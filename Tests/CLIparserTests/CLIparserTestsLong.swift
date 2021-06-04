@@ -76,6 +76,10 @@ extension CLIparserTests {
             XCTAssertEqual(result.count, 2)
             XCTAssertEqual(result[0].optValuesAt.count, 1)
 
+            result = try ArgumentList(["command", "--fiona=1", "--elle", "1"]).optionsParse(opts)
+            XCTAssertEqual(result.count, 2)
+            XCTAssertEqual(result[0].optValuesAt.count, 1)
+
             XCTAssertThrowsError(try ArgumentList(["command", "--fiona", "--", "--elle", "1"]).optionsParse(opts)) {
                 print($0.localizedDescription, to: &standardError)
             }

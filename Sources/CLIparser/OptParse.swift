@@ -90,12 +90,12 @@ extension ArgumentList {
             // -- signals the end of arguments
             if arg == "--" {
                 self = .end
+            // a prefix of -- is always long and also counts as an end
+            } else if arg.hasPrefix("--") {
+                self = .long2
             // use endOrNone when arguments can start with -
             } else if test == .endOrNone {
                 self = .none
-            // a prefix of -- is always long
-            } else if arg.hasPrefix("--") {
-                self = .long2
             // a single - can be long or short depending on longOnly
             } else if arg.hasPrefix("-") {
                 self = (test == .longOnly) ? .long1 : .short
