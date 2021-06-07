@@ -68,9 +68,13 @@ extension CLIparserTests {
 
     func testUsage3() {
         let opts = [
-            OptToGet(long: "adam", usage: "long only option")
+            OptToGet(long: "adam", usage: "long only option\nwith second line")
         ]
-        let expected = "  -adam                  long only option"
+        let expected =
+            """
+              -adam                  long only option
+                                     with second line
+            """
 
         let usage = Usage().optUsage(opts, options: [.longOnly])
         XCTAssertEqual(usage, expected)

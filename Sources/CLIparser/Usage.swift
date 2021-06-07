@@ -98,8 +98,17 @@ public struct Usage {
         }
     }
 
+    private func wrap(_ text: String, _ result: inout [String]) {
+        var one = text
+        while one.count > textRight {
+            wrapOnce(&one, &result)
+        }
+        // remove any soft breaks
+        result.append(one.replacingOccurrences(of: String(Self.softBreak), with: " "))
+
+    }
+
     private func oneUsage(_ name: String, opt: OptToGet, akaIndent: String) -> String {
-        let brk = Self.softBreak
         var result: [String] = []
         var one: String
         var onlySpaces = name.isEmpty
@@ -125,14 +134,18 @@ public struct Usage {
                 if !onlySpaces { result.append(one) }
                 one = spaces
             }
-            one += usage
+            let lines = usage.components(separatedBy: "\n")
+            one += lines[0]
 
-            while one.count > textRight {
-                wrapOnce(&one, &result)
+            wrap(one, &result)
+
+            for line in lines[1...] {
+                wrap(spaces + line, &result)
             }
+
+        } else {
+            result.append(one)
         }
-        // remove any soft breaks
-        result.append(one.replacingOccurrences(of: String(brk), with: " "))
 
         if let aka = opt.aka {
             one = indent + akaIndent + "aka: " + aka.joined(separator: ", ")
