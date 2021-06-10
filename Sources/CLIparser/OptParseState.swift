@@ -67,15 +67,11 @@ internal class ParseState {
                 shortToGet[short] = optMatch
             }
             if let long = opt.long {
-                do {
-                    try addToLong(long, optMatch)
-                    if let aka = opt.aka {
-                        for name in aka {
-                            try addToLong(name, optMatch)
-                        }
+                try addToLong(long, optMatch)
+                if let aka = opt.aka {
+                    for name in aka {
+                        try addToLong(name, optMatch)
                     }
-                } catch {
-                    throw error
                 }
             }
         }

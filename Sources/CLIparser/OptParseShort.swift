@@ -22,18 +22,14 @@ extension ArgumentList {
         let shortIndex = index           // check that we are in the same place
         let arg = args[index]
         var charIndex = arg.index(after: arg.startIndex)
-        do {
-            while charIndex < arg.endIndex {
-                let name = String(arg[charIndex])
-                charIndex = arg.index(after: charIndex)
-                try shortOption(name: name, &charIndex, state)
-                // if we aren't handling the same arg we need to check for short or long opts
-                if index != shortIndex { break }
-            }
-            if index == shortIndex { index += 1 }
-        } catch {
-            throw error
+        while charIndex < arg.endIndex {
+            let name = String(arg[charIndex])
+            charIndex = arg.index(after: charIndex)
+            try shortOption(name: name, &charIndex, state)
+            // if we aren't handling the same arg we need to check for short or long opts
+            if index != shortIndex { break }
         }
+        if index == shortIndex { index += 1 }
     }
 
     /// Handle a short option
@@ -77,11 +73,7 @@ extension ArgumentList {
             }
             index += 1
 
-            do {
-                try argsCopy(optMatch)
-            } catch {
-                throw(error)
-            }
+            try argsCopy(optMatch)
         }
     }
 }

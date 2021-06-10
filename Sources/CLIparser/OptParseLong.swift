@@ -94,11 +94,7 @@ extension ArgumentList {
         index += 1
         if opt.hasArgs {
             if arg1 != nil { match.optValuesAt.append(OptValueAt(value: arg1!, atIndex: index)) }
-            do {
-                try argsCopy(optMatch)
-            } catch {
-                throw error
-            }
+            try argsCopy(optMatch)
         }
     }
 }

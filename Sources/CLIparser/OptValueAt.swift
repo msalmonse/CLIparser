@@ -47,12 +47,8 @@ extension OptValueAt {
     public static func doubleArray(_ vals: OptValuesAt) throws -> [Double] {
         var result: [Double] = []
 
-        do {
-            for val in vals {
-                result.append(try val.doubleValue())
-            }
-        } catch {
-            throw error
+        for val in vals {
+            result.append(try val.doubleValue())
         }
 
         return result
@@ -79,12 +75,8 @@ extension OptValueAt {
     public static func intArray(_ vals: OptValuesAt) throws -> [Int] {
         var result: [Int] = []
 
-        do {
-            for val in vals {
-                result.append(try val.intValue())
-            }
-        } catch {
-            throw error
+        for val in vals {
+            result.append(try val.intValue())
         }
 
         return result

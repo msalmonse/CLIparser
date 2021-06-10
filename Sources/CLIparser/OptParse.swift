@@ -22,59 +22,57 @@ extension ArgumentList {
     /// - Returns: a list of options found
 
     public func optionsParse(_ toGet: OptsToGet, _ positionalTag: CLIparserTag? = nil) throws -> OptsGot {
-        do {
-            let state = try ParseState(toGet, options.canAbbreviate)
-            let minusTest: MinusTest = options.onlyLong ? .longOnly : .normal
-            argsLoop: while args.indices.contains(index) {
-                switch MinusCount(args[index], type: minusTest) {
-                case .end:
-                    index += 1
-                    break argsLoop
-                case .long2:
-                    try longOption(2, state)
-                case .long1:
-                    try longOption(1, state)
-                case .short:    // only -
-                    try shortOptions(state)
-                case .none:
-                    break argsLoop
-                }
+        let state = try ParseState(toGet, options.canAbbreviate)
+        let minusTest: MinusTest = options.onlyLong ? .longOnly : .normal
+        argsLoop: while args.indices.contains(index) {
+            switch MinusCount(args[index], type: minusTest) {
+            case .end:
+                index += 1
+                break argsLoop
+            case .long2:
+                try longOption(2, state)
+            case .long1:
+                try longOption(1, state)
+            case .short:    // only -
+                try shortOptions(state)
+            case .none:
+                break argsLoop
             }
+        }
 
-            for optGot in state.matched {
-                let minCount = Int(optGot.opt.minCount)
-                let maxCount = Int(optGot.opt.maxCount)
-                switch optGot.optValuesAt.count {
-                case 0..<minCount:
-                    throw CLIparserError.insufficientArguments(name: optGot.name)
-                case minCount...maxCount:
-                    break
-                default:
-                    throw CLIparserError.tooManyArguments(name: optGot.name)
-                }
+        for optGot in state.matched {
+            let minCount = Int(optGot.opt.minCount)
+            let maxCount = Int(optGot.opt.maxCount)
+            switch optGot.optValuesAt.count {
+            case 0..<minCount:
+                throw CLIparserError.insufficientArguments(name: optGot.name)
+            case minCount...maxCount:
+                break
+            default:
+                throw CLIparserError.tooManyArguments(name: optGot.name)
             }
+        }
 
-            // check for missing required options
-            if !state.required.isEmpty {
-                var missing: [String] = []
-                for opt in state.required {
-                    missing.append(opt.long ?? opt.short ?? "???")
-                }
-                throw CLIparserError.missingOptions(names: missing.joined(separator: ", "))
+        // check for missing required options
+        if !state.required.isEmpty {
+            var missing: [String] = []
+            for opt in state.required {
+                missing.append(opt.long ?? opt.short ?? "???")
             }
+            throw CLIparserError.missingOptions(names: missing.joined(separator: ", "))
+        }
 
-            // Copy remaining arguments
-            if index < args.count {
-                let opt = OptToGet(1...255, tag: positionalTag)
-                let match = OptGot(opt: opt)
-                let optMatch = OptMatch(opt)
-                optMatch.matched = match
-                state.matched.append(match)
-                try argsCopy(optMatch)
-            }
+        // Copy remaining arguments
+        if index < args.count {
+            let opt = OptToGet(1...255, tag: positionalTag)
+            let match = OptGot(opt: opt)
+            let optMatch = OptMatch(opt)
+            optMatch.matched = match
+            state.matched.append(match)
+            try argsCopy(optMatch)
+        }
 
-            return state.matched
-        } catch { throw error }
+        return state.matched
     }
 
     enum MinusTest { case normal, longOnly, endOrNone }
