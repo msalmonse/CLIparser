@@ -48,7 +48,7 @@ extension ArgumentList {
     ///   - CLIparserError.unknownName
 
     func longOption(_ minuses: Int, _ state: ParseState) throws {
-        var optMatch: OptMatch
+        let optMatch: OptMatch
         var arg1: String?
         var name: String = String(args[index].dropFirst(minuses))
         var invert = false
