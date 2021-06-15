@@ -13,18 +13,18 @@ public class OptToGet: Comparable, Hashable, Encodable {
         case short, long, minmax, options, tag, usage, argTag
     }
 
-    let short: String?
-    let long: String?
-    let aka: [String]?
-    let minCount: UInt8
-    let maxCount: UInt8
-    let options: OptToGet.Options
-    let tag: CLIparserTag?
-    let usage: String?
-    let argTag: String?
+    public let short: String?
+    public let long: String?
+    public let aka: [String]?
+    public let minCount: UInt8
+    public let maxCount: UInt8
+    public let options: OptToGet.Options
+    public let tag: CLIparserTag?
+    public let usage: String?
+    public let argTag: String?
 
     // test if arguments expected
-    var hasArgs: Bool { minCount > 0 || maxCount > 0 }
+    public var hasArgs: Bool { minCount > 0 || maxCount > 0 }
 
     /// Initialize an OptToGet object
     /// - Parameters:
