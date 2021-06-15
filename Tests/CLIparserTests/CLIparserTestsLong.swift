@@ -170,6 +170,11 @@ extension CLIparserTests {
             XCTAssertThrowsError(try ArgumentList(["command", "-cecil", "-nocecil"]).optionsParse(opts)) {
                 print($0.localizedDescription, to: &standardError)
             }
+
+            result = try ArgumentList(["command", "--", "-", "-", "file"], options: [.longOnly])
+                .optionsParse(opts)
+            XCTAssertEqual(result.count, 1)
+            XCTAssertEqual(result[0].optValuesAt.count, 3)
         } catch {
             print(error.localizedDescription, to: &standardError)
             XCTFail(error.localizedDescription)

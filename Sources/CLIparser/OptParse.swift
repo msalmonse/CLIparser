@@ -64,7 +64,7 @@ extension ArgumentList {
 
         // Copy remaining arguments
         if index < args.count {
-            let opt = OptToGet(1...255, tag: positionalTag)
+            let opt = OptToGet(1...255, options: [.includeMinus, .includeMinusMinus], tag: positionalTag)
             let match = OptGot(opt: opt)
             let optMatch = OptMatch(opt)
             optMatch.matched = match
