@@ -48,9 +48,9 @@ extension CLIparserTests {
             OptToGet(long: "adam"),
             OptToGet(long: "bertil"),
             OptToGet(long: "cecil"),
-            OptToGet(long: "david", options: [.multi]),
+            OptToGet(long: "david", option: .multi),
             OptToGet(long: "elle", 1...2, options: [.multi]),
-            OptToGet(long: "fiona", 1...2, options: [.includeMinus])
+            OptToGet(long: "fiona", 1...2, option: .includeMinus)
         ]
 
         do {

@@ -51,7 +51,7 @@ final class CLIparserTests: XCTestCase {
 
     func testRequired() {
         let opts: OptsToGet = [
-            OptToGet(short: "R", long: "longRequired", options: [.required]),
+            OptToGet(short: "R", long: "longRequired", option: .required),
             OptToGet(short: "N")
         ]
 

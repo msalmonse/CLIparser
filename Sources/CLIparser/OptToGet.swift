@@ -42,7 +42,7 @@ public class OptToGet: Comparable, Hashable, Encodable {
         long: String? = nil,
         aka: [String]? = nil,
         _ minMax: ClosedRange<UInt8> = 0...0,
-        options: [OptToGet.Options] = [],
+        options: [OptToGet.Options],
         tag: CLIparserTag? = nil,
         usage: String? = nil,
         argTag: String? = nil
@@ -56,6 +56,41 @@ public class OptToGet: Comparable, Hashable, Encodable {
         self.tag = tag
         self.usage = usage
         self.argTag = argTag
+    }
+
+    /// The same as init but with a single option
+    
+    public convenience init (
+        short: String? = nil,
+        long: String? = nil,
+        aka: [String]? = nil,
+        _ minMax: ClosedRange<UInt8> = 0...0,
+        option: OptToGet.Options,
+        tag: CLIparserTag? = nil,
+        usage: String? = nil,
+        argTag: String? = nil
+    ) {
+        self.init(short: short, long: long, aka: aka,
+                  minMax, options: [option], tag: tag,
+                  usage: usage, argTag: argTag
+        )
+    }
+
+    /// The same as init but with no option
+
+    public convenience init (
+        short: String? = nil,
+        long: String? = nil,
+        aka: [String]? = nil,
+        _ minMax: ClosedRange<UInt8> = 0...0,
+        tag: CLIparserTag? = nil,
+        usage: String? = nil,
+        argTag: String? = nil
+    ) {
+        self.init(short: short, long: long, aka: aka,
+                  minMax, options: [], tag: tag,
+                  usage: usage, argTag: argTag
+        )
     }
 
     func match(long name: String) -> Bool {
