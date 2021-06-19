@@ -7,7 +7,6 @@
 
 import Foundation
 
-#if DEBUG
 extension OptToGet: Encodable {
     internal enum CodingKeys: CodingKey {
         case short, long, minmax, options, tag, usage, argTag
@@ -49,4 +48,3 @@ extension CmdToGet: Encodable {
         if let usage = usage { try container.encode(usage, forKey: .usage) }
     }
 }
-#endif
