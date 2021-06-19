@@ -9,8 +9,8 @@ import Foundation
 
 /// Value found at argument
 public struct OptValueAt {
-    let value: String
-    let atIndex: Int
+    public let value: String
+    public let atIndex: Int
 
     // Short cut
     public var isEmpty: Bool { value.isEmpty }

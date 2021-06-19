@@ -10,13 +10,9 @@ import Foundation
 /// A command and sub command to match against the command line arguments
 
 public class CmdToGet {
-    internal enum CodingKeys: CodingKey {
-        case cmdAndSub, usage
-    }
-
-    let cmdAndSub: [String]
+    public let cmdAndSub: [String]
     public let tag: CLIparserTag?
-    let usage: String?
+    public let usage: String?
 
     public init(_ cmdAndSub: [String], tag: CLIparserTag? = nil, usage: String? = nil) {
         self.cmdAndSub = cmdAndSub

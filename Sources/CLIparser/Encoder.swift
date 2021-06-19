@@ -9,6 +9,9 @@ import Foundation
 
 #if DEBUG
 extension OptToGet: Encodable {
+    internal enum CodingKeys: CodingKey {
+        case short, long, minmax, options, tag, usage, argTag
+    }
 
     /// Encode an OptToGet instance
     /// - Parameter encoder: encoder
@@ -32,6 +35,9 @@ extension OptToGet: Encodable {
 }
 
 extension CmdToGet: Encodable {
+    internal enum CodingKeys: CodingKey {
+        case cmdAndSub, usage
+    }
 
     /// Encode a CmdToGet instance
     /// - Parameter encoder: encoder

@@ -9,10 +9,6 @@ import Foundation
 
 /// Description of the option to get
 public class OptToGet: Comparable, Hashable {
-    internal enum CodingKeys: CodingKey {
-        case short, long, minmax, options, tag, usage, argTag
-    }
-
     public let short: String?
     public let long: String?
     public let aka: [String]?
