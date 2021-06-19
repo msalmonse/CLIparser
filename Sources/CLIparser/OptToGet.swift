@@ -8,7 +8,7 @@
 import Foundation
 
 /// Description of the option to get
-public class OptToGet: Comparable, Hashable, Encodable {
+public class OptToGet: Comparable, Hashable {
     internal enum CodingKeys: CodingKey {
         case short, long, minmax, options, tag, usage, argTag
     }
@@ -100,26 +100,6 @@ public class OptToGet: Comparable, Hashable, Encodable {
         }
 
         return false
-    }
-
-    /// Encode an OptToGet instance
-    /// - Parameter encoder: encoder
-    /// - Throws: `EncodingError.invalidValue`
-
-    public func encode(to encoder: Encoder) throws {
-        let softBreak = String(Usage.softBreak)
-        var container = encoder.container(keyedBy: Self.CodingKeys.self)
-        if let short = short { try container.encode(short, forKey: .short) }
-        if let long = long { try container.encode(long, forKey: .long) }
-        if maxCount > 0 {
-            let minmax = String(format: "%d...%d", minCount, maxCount)
-            try container.encode(minmax, forKey: .minmax)
-        }
-        if options.rawValue != 0 { try container.encode(options.description, forKey: .options) }
-        if let usage = usage {
-            try container.encode(usage.replacingOccurrences(of: softBreak, with: " "), forKey: .usage)
-        }
-        if let argTag = argTag { try container.encode(argTag, forKey: .argTag) }
     }
 
     /// Generate hash value

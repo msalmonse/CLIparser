@@ -9,7 +9,7 @@ import Foundation
 
 /// A command and sub command to match against the command line arguments
 
-public class CmdToGet: Encodable {
+public class CmdToGet {
     internal enum CodingKeys: CodingKey {
         case cmdAndSub, usage
     }
@@ -22,16 +22,6 @@ public class CmdToGet: Encodable {
         self.cmdAndSub = cmdAndSub
         self.tag = tag
         self.usage = usage
-    }
-
-    /// Encode a CmdToGet instance
-    /// - Parameter encoder: encoder
-    /// - Throws: `EncodingError.invalidValue`
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(cmdAndSub, forKey: .cmdAndSub)
-        if let usage = usage { try container.encode(usage, forKey: .usage) }
     }
 }
 
