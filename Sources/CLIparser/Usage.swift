@@ -170,7 +170,7 @@ public struct Usage {
         }
 
         if let env = opt.env {
-            one = indent + extraIndent + "env: " + env
+            one = indent + extraIndent + "environment variable: " + env
             result.append(one)
         }
 

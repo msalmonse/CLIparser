@@ -101,7 +101,7 @@ extension CLIparserTests {
         let expected =
             """
               -adam                  long only option
-               env: ADAM
+               environment variable: ADAM
             """
 
         let usage = Usage().optUsage(opts, options: [.longOnly])
