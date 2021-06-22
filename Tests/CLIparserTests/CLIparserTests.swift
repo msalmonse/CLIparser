@@ -179,4 +179,43 @@ final class CLIparserTests: XCTestCase {
             XCTFail(error.localizedDescription)
         }
     }
+
+    // test environmentParse
+    func testEnvironment() {
+        let opts: OptsToGet = [
+            OptToGet(env: "A"),
+            OptToGet(env: "B")
+        ]
+        var env: [String: String] = [:]
+
+        var result = environmentParse(opts, env)
+        XCTAssertEqual(result.count, 0)
+
+        env["C"] = "testC"
+        result = environmentParse(opts, env)
+        XCTAssertEqual(result.count, 0)
+
+        env["A"] = "testA"
+        result = environmentParse(opts, env)
+        XCTAssertEqual(result.count, 1)
+        XCTAssertEqual(result[0].stringValue, env["A"])
+
+        env["B"] = "testB"
+        result = environmentParse(opts, env)
+        XCTAssertEqual(result.count, 2)
+        XCTAssertEqual(result[0].count, 1)
+
+        env["A"] = nil
+        result = environmentParse(opts, env)
+        XCTAssertEqual(result.count, 1)
+        XCTAssertEqual(result[0].stringValue, env["B"])
+    }
+
+    func testShortValue() {
+        var result = OptValueAt(value: "0123456789", atIndex: 0).shortValue
+        XCTAssertEqual(result, "0123456789")
+
+        result = OptValueAt(value: "0123456789abcdefg", atIndex: 0).shortValue
+        XCTAssertEqual(result, "01234...fg")
+    }
 }

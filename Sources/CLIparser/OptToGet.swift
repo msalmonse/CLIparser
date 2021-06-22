@@ -18,6 +18,7 @@ public class OptToGet: Comparable, Hashable {
     public let tag: CLIparserTag?
     public let usage: String?
     public let argTag: String?
+    public let env: String?
 
     // test if arguments expected
     public var hasArgs: Bool { minCount > 0 || maxCount > 0 }
@@ -32,6 +33,7 @@ public class OptToGet: Comparable, Hashable {
     ///   - tag: opaque object
     ///   - usage: help text
     ///   - argTag: how to tag the arguments for this tag e.g. for --file: <file name>...
+    ///   - env: the name of the environment variable associated, if any
 
     public init(
         short: String? = nil,
@@ -41,7 +43,8 @@ public class OptToGet: Comparable, Hashable {
         options: [OptToGet.Options],
         tag: CLIparserTag? = nil,
         usage: String? = nil,
-        argTag: String? = nil
+        argTag: String? = nil,
+        env: String? = nil
     ) {
         self.short = short
         self.long = long
@@ -52,10 +55,11 @@ public class OptToGet: Comparable, Hashable {
         self.tag = tag
         self.usage = usage
         self.argTag = argTag
+        self.env = env
     }
 
     /// The same as init but with a single option
-    
+
     public convenience init (
         short: String? = nil,
         long: String? = nil,
@@ -64,11 +68,12 @@ public class OptToGet: Comparable, Hashable {
         option: OptToGet.Options,
         tag: CLIparserTag? = nil,
         usage: String? = nil,
-        argTag: String? = nil
+        argTag: String? = nil,
+        env: String? = nil
     ) {
         self.init(short: short, long: long, aka: aka,
                   minMax, options: [option], tag: tag,
-                  usage: usage, argTag: argTag
+                  usage: usage, argTag: argTag, env: env
         )
     }
 
@@ -81,11 +86,12 @@ public class OptToGet: Comparable, Hashable {
         _ minMax: ClosedRange<UInt8> = 0...0,
         tag: CLIparserTag? = nil,
         usage: String? = nil,
-        argTag: String? = nil
+        argTag: String? = nil,
+        env: String? = nil
     ) {
         self.init(short: short, long: long, aka: aka,
                   minMax, options: [], tag: tag,
-                  usage: usage, argTag: argTag
+                  usage: usage, argTag: argTag, env: env
         )
     }
 

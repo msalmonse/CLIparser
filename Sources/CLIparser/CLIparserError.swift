@@ -29,7 +29,11 @@ extension CLIparserError: LocalizedError {
         case let .duplicateOption(name, index):
             return "Option \"\(name)\" is on the command line multiple times, last at argument \(index)"
         case let .illegalValue(type, valueAt):
-            return "Not a valid \(type) at argument \(valueAt.atIndex): \"\(valueAt.value)\""
+            if let key = valueAt.atEnv {
+                return "Not a valid \(type) at environment variable \"\(key)\": \"\(valueAt.shortValue)\""
+            } else {
+                return "Not a valid \(type) at argument \(valueAt.atIndex): \"\(valueAt.shortValue)\""
+            }
         case let .insufficientArguments(name):
             return "Not enough arguments to satisfy minimum requirements for \"\(name)\""
         case let .missingOptions(names):

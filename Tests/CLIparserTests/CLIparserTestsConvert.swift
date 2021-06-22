@@ -16,6 +16,10 @@ extension CLIparserTests {
             print($0.localizedDescription, to: &standardError)
         }
 
+        XCTAssertThrowsError(try OptValueAt(value: "3,a", atIndex: 0, atEnv: "DOUBLE").doubleValue()) {
+            print($0.localizedDescription, to: &standardError)
+        }
+
         XCTAssertEqual(try OptValueAt(value: "3", atIndex: 1).intValue(), 3)
 
         XCTAssertThrowsError(try OptValueAt(value: "3a", atIndex: 1).intValue()) {

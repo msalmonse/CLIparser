@@ -31,6 +31,11 @@ public struct Usage {
     /// Indicate a potential line break
     public static let softBreak: Character = "\u{11}"
 
+    /// Wrap the text only once
+    /// - Parameters:
+    ///   - one: the text to wrap
+    ///   - result: partially wrapped string
+
     private func wrapOnce(_ one: inout String, _ result: inout [String]) {
         let brk = Self.softBreak
         let width = textRight - textLeft
@@ -98,6 +103,11 @@ public struct Usage {
         }
     }
 
+    /// Wrap text
+    /// - Parameters:
+    ///   - text: text to wrap
+    ///   - result: wrapped text
+
     private func wrap(_ text: String, _ result: inout [String]) {
         var one = text
         while one.count > textRight {
@@ -108,7 +118,14 @@ public struct Usage {
 
     }
 
-    private func oneUsage(_ name: String, opt: OptToGet, akaIndent: String) -> String {
+    /// Create one usage string
+    /// - Parameters:
+    ///   - name: option name or names
+    ///   - opt: the OptToGet fot the usage
+    ///   - extraIndent: indent for aka and env
+    /// - Returns: usage string for one OptToGet
+
+    private func oneUsage(_ name: String, opt: OptToGet, extraIndent: String) -> String {
         var result: [String] = []
         var one: String
         var onlySpaces = name.isEmpty
@@ -148,7 +165,12 @@ public struct Usage {
         }
 
         if let aka = opt.aka {
-            one = indent + akaIndent + "aka: " + aka.joined(separator: ", ")
+            one = indent + extraIndent + "aka: " + aka.joined(separator: ", ")
+            result.append(one)
+        }
+
+        if let env = opt.env {
+            one = indent + extraIndent + "env: " + env
             result.append(one)
         }
 
@@ -173,16 +195,16 @@ public struct Usage {
 
         for opt in opts.sorted() where !opt.options.isHidden {
             if longOnly, let name = opt.long {
-                result.append(oneUsage("-\(name)", opt: opt, akaIndent: " "))
+                result.append(oneUsage("-\(name)", opt: opt, extraIndent: " "))
             } else if let long = opt.long, let short = opt.short {
                 let names = longFirst ? "--\(long), -\(short)" : "-\(short), --\(long)"
-                result.append(oneUsage(names, opt: opt, akaIndent: longFirst ? "  " : " "))
+                result.append(oneUsage(names, opt: opt, extraIndent: longFirst ? "  " : " "))
             } else if let name = opt.long {
-                result.append(oneUsage("--\(name)", opt: opt, akaIndent: "  "))
+                result.append(oneUsage("--\(name)", opt: opt, extraIndent: "  "))
             } else if let name = opt.short {
-                result.append(oneUsage("-\(name)", opt: opt, akaIndent: " "))
+                result.append(oneUsage("-\(name)", opt: opt, extraIndent: " "))
             } else {
-                result.append(oneUsage("", opt: opt, akaIndent: ""))
+                result.append(oneUsage("", opt: opt, extraIndent: ""))
             }
         }
 
@@ -198,7 +220,7 @@ public struct Usage {
         var result: [String] = []
 
         for opt in opts {
-            result.append(oneUsage("", opt: opt, akaIndent: ""))
+            result.append(oneUsage("", opt: opt, extraIndent: ""))
         }
 
         return result.joined(separator: "\n")

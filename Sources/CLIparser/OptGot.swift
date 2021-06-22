@@ -22,6 +22,12 @@ public class OptGot {
     public var tag: CLIparserTag? { opt.tag }
 
     init(opt: OptToGet) { self.opt = opt }
+
+    convenience init(opt: OptToGet, value: OptValueAt) {
+        self.init(opt: opt)
+        optValuesAt = [value]
+        count = 1
+    }
 }
 
 public typealias OptsGot = [OptGot]

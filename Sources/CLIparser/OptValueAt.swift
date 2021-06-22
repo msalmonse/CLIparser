@@ -11,11 +11,30 @@ import Foundation
 public struct OptValueAt {
     public let value: String
     public let atIndex: Int
+    public let atEnv: String?
+
+    /// Initializer for OptValueAt
+    /// - Parameters:
+    ///   - value: value for option
+    ///   - atIndex: index in argument list
+    ///   - atEnv: key in environment
+
+    init(value: String, atIndex: Int, atEnv: String? = nil) {
+        self.value = value
+        self.atIndex = atIndex
+        self.atEnv = atEnv
+    }
 
     // Short cut
     public var isEmpty: Bool { value.isEmpty }
 
     public static let empty = OptValueAt(value: "", atIndex: -1)
+
+    public var shortValue: String {
+        if value.count <= 10 { return value }
+        let retval = value.prefix(5) + "..." + value.suffix(2)
+        return String(retval)
+    }
 
     public func error(_ valueType: String) -> CLIparserError {
         return CLIparserError.illegalValue(type: valueType, valueAt: self)
