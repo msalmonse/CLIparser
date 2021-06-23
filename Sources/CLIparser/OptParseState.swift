@@ -59,18 +59,21 @@ internal class ParseState {
         }
 
         for opt in toGet {
-            if opt.long == nil && opt.short == nil { throw CLIparserError.missingName }
-            if opt.options.isRequired { required.insert(opt) }
-            let optMatch = OptMatch(opt)
-            if let short = opt.short {
-                if shortToGet[short] != nil { throw CLIparserError.duplicateName(name: short) }
-                shortToGet[short] = optMatch
-            }
-            if let long = opt.long {
-                try addToLong(long, optMatch)
-                if let aka = opt.aka {
-                    for name in aka {
-                        try addToLong(name, optMatch)
+            if opt.long == nil && opt.short == nil {
+                if opt.env == nil { throw CLIparserError.missingName }
+            } else {
+                if opt.options.isRequired { required.insert(opt) }
+                let optMatch = OptMatch(opt)
+                if let short = opt.short {
+                    if shortToGet[short] != nil { throw CLIparserError.duplicateName(name: short) }
+                    shortToGet[short] = optMatch
+                }
+                if let long = opt.long {
+                    try addToLong(long, optMatch)
+                    if let aka = opt.aka {
+                        for name in aka {
+                            try addToLong(name, optMatch)
+                        }
                     }
                 }
             }

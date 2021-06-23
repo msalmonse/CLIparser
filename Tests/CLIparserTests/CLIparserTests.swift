@@ -188,6 +188,9 @@ final class CLIparserTests: XCTestCase {
         ]
         var env: [String: String] = [:]
 
+        // test no throw with environment only options
+        XCTAssertNoThrow(try ArgumentList(["cmd", "ab"]).optionsParse(opts))
+
         var result = environmentParse(opts, env)
         XCTAssertEqual(result.count, 0)
 
