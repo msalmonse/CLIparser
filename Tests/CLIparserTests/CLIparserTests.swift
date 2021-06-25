@@ -12,6 +12,11 @@ final class CLIparserTests: XCTestCase {
         XCTAssertEqual(crc8(data), 92)
     }
 
+    func testArgsLeft() {
+        XCTAssertEqual(ArgumentList(["cmd"]).argsLeft, false)
+        XCTAssertEqual(ArgumentList(["cmd", ""]).argsLeft, true)
+    }
+
     func testCommandParse() {
         let cmds: [CmdToGet] = [
             CmdToGet(["a", "b", "c"], tag: CmdTag.abcCmd),

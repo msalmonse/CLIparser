@@ -23,4 +23,8 @@ public class ArgumentList {
         index = startIndex
         self.options = options
     }
+
+    /// Are there any more arguments?
+
+    public var argsLeft: Bool { return args.count > index }
 }
